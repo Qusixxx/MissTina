@@ -1,84 +1,83 @@
 import html
 
-from typing import List
+from typing idxal siyahısı
 
-from telegram import Update, Bot
-from telegram.ext import CommandHandler, Filters
-from telegram.ext.dispatcher import run_async
+from telegram idxal Update, Bot
+from telegram.ext idxal CommandHandler, Filters
+from telegram.ext.dispetçer idxal run_async
 
-from tg_bot import dispatcher, SUDO_USERS, OWNER_USERNAME, OWNER_ID
-from tg_bot.modules.helper_funcs.extraction import extract_user
-from tg_bot.modules.helper_funcs.chat_status import bot_admin
+from tg_bot import dispetçer, SUDO_USERS, OWNER_USERNAME, OWNER_ID
+from tg_bot.modullar.helper_funcs.extrac idxal extract_user
+from tg_bot.modules.helper_funcs.chat_status bot_admin idxal edin
 
 
 @bot_admin
 @run_async
-def addsudo(bot: Bot, update: Update, args: List[str]):
+def addsudo(bot: Bot, yeniləmə: Yeniləmə, args: Siyahı [str]):
     message = update.effective_message
     banner = update.effective_user
-    user_id = extract_user(message, args)
+    user_id = çıxarış_ istifadəçisi (mesaj, arq)
     
     if not user_id:
-        message.reply_text("Refer a user first....")
-        return ""
+        message.reply_text("Əvvəlcə bir istifadəçiyə müraciət edin....")
+      qayıt""
         
     if int(user_id) == OWNER_ID:
-        message.reply_text("The specified user is my owner! No need add him to SUDO_USERS list!")
-        return ""
+        message.reply_text("Göstərilən istifadəçi mənim sahibimdir!Onu SUDO_USERS siyahısına əlavə etməyə ehtiyac yoxdur")
+        qayıt "
         
     if int(user_id) in SUDO_USERS:
-        message.reply_text("Buddy this user is already a sudo user.")
-        return ""
+        message.reply_text("Dostum bu istifadəçi artıq sudo istifadəçisidir.")
+        qayıt ""
     
-    with open("sudo_users.txt","a") as file:
-        file.write(str(user_id) + "\n")
-    
-    SUDO_USERS.append(user_id)
-    message.reply_text("Succefully Added To SUDO List!")
+    with open(" sudo_users.txt","a") fayl kimi:
+        file.write(str(İstifadəçi_adı) + "\n")
+   
+    SUDO_USERS.əlavə edin(İstifadəçi_adı)
+    message.reply_text("Uğurla SUDO siyahısına əlavə edildi!")
         
-    return ""
+    qayıt ""
 
 @bot_admin
 @run_async
-def rsudo(bot: Bot, update: Update, args: List[str]):
+def rsudo(bot: Bot, yeniləmə: Yeniləmə, args: Siyahı [str]):
     message = update.effective_message
-    user_id = extract_user(message, args)
+    user_id = çıxarış_ istifadəçisi (mesaj, arq)
     
     if not user_id:
-        message.reply_text("Refer the user first.")
-        return ""
+        message.reply_text("Əvvəlcə istifadəçiyə müraciət edin....")
 
     if int(user_id) == OWNER_ID:
-        message.reply_text("The specified user is my owner! I won't remove him from SUDO_USERS list!")
-        return ""
+        message.reply_text("Göstərilən istifadəçi mənim sahibimdir!Onu SUDO_USERS siyahısından çıxarmayacağam!")
+        qayıt ""
     
     if user_id not in SUDO_USERS:
-        message.reply_text("{} is not a sudo user".format(user_id))
-        return ""
+        message.reply_text("{}sudo istifadəçisi deyil".format(user_id))
+        qayıt ""
 
-    users = [line.rstrip('\n') for line in open("sudo_users.txt")]
+    users = [line.rstrip('\n')açıq xətt üçün("sudo_users.txt")]
 
-    with open("sudo_users.txt","w") as file:
-        for user in users:
-            if not int(user) == user_id:
-                file.write(str(user) + "\n")
+    with open("sudo_users.txt","w")fayl kimi:
+     istifadəçilərdəki istifadəçi üçün:
+           if not int(istifadəçi) ==istifadəçi_adı:
+                file.write(str(istifadəçi) + "\n")
 
-    SUDO_USERS.remove(user_id)
-    message.reply_text("Yep Succefully removed from SUDO List!")
+    SUDO_USERS.remove(istifadəçi_adı)
+    message.reply_text("Yep Uğurla SUDO Siyahısından çıxarıldı!")
     
-    return ""
+    qayıt ""
 
 
 __help__ = """
 *Bot owner only:*
- - /addsudo: promotes the user to SUDO USER
- - /rsudo: demotes the user from SUDO USER
+ - /addsudo: istifadəçini SUDO USER səviyyəsinə yüksəldir
+ - /rsudo: istifadəçini SUDO USER-dən aşağı salır
 """
 
 __mod_name__ = "Sudo"
 
-addsudo_HANDLER = CommandHandler("addsudo", addsudo, pass_args=True, filters=Filters.user(OWNER_ID))
-rsudo_HANDLER = CommandHandler("rsudo", rsudo, pass_args=True, filters=Filters.user(OWNER_ID))
+addsudo_HANDLER = CommandHandler("addsudo", addsudo, pass_args=Doğru, filtrlər=Filters.user(OWNER_ID))
+rsudo_HANDLER = CommandHandler("rsudo", rsudo, pass_args=Doğru, filtrlər=Filters.user(OWNER_ID))
 
 dispatcher.add_handler(addsudo_HANDLER)
 dispatcher.add_handler(rsudo_HANDLER)
